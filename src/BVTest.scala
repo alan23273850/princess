@@ -6,7 +6,7 @@ import ap.theories.ADT
 import ADT.BoolADT.{True, False}
 import ap.theories.arrays._
 
-object BVTest extends App {
+class BVClass (val N: Integer) extends App {
 
   val debug = false // change to false for much faster solving
 
@@ -43,8 +43,6 @@ object BVTest extends App {
 
   def setK1(s : ITerm) : ITerm =
     complex(a(s), b(s), c(s), d(s), 1)
-
-  val N = 5
 
   val vectorOps = Vector(
     CombArray.CombinatorSpec("vec_plus", List(0, 0), 0,
@@ -145,8 +143,14 @@ object BVTest extends App {
       !! (zero === arrayN.const(complex(0, 0, 0, 0, 0)))
       !! (states(0)  === sto(zero, nFalse(N) ++ List(complex(1, 0, 0, 0, 0)) : _*))
       println(???) // sat
-      println(evalToTerm(states(3*N)))
+    //   println(evalToTerm(states(3*N)))
     }
   }
 
+}
+
+object BVTest {
+    def main(args: Array[String]): Unit = {
+        new BVClass(args(0).toInt).main(args)
+    }
 }
