@@ -81,11 +81,31 @@ object EPRTest extends App {
   def selectN(ar : ITerm, indexes : ITerm*) : ITerm =
     IFunApp(arrayN.select, List(ar) ++ indexes)
 
+  def X(k : Int, s : ITerm, Xs : ITerm) : IFormula =
+    proj(Xs, k -> False) === proj(s, k -> True) &
+    proj(Xs, k -> True) === proj(s, k -> False)
+
+  def Y(k : Int, s : ITerm, Ys : ITerm) : IFormula =
+    proj(Ys, k -> False) === vec_negate(vec_omegaMult(vec_omegaMult(proj(s, k -> True)))) &
+    proj(Ys, k -> True) === vec_omegaMult(vec_omegaMult(proj(s, k -> False)))
+
+  def Z(k : Int, s : ITerm, Zs : ITerm) : IFormula =
+    proj(Zs, k -> False) === proj(s, k -> False) &
+    proj(Zs, k -> True) === vec_negate(proj(s, k -> True))
+
   def H(k : Int, s : ITerm, hs : ITerm) : IFormula =
     proj(hs, k -> False) ===
       vec_sqrt2Div(vec_plus(proj(s, k -> False), proj(s, k -> True))) &
     proj(hs, k -> True) ===
       vec_sqrt2Div(vec_minus(proj(s, k -> False), proj(s, k -> True)))
+
+  def S(k : Int, s : ITerm, Ss : ITerm) : IFormula =
+    proj(Ss, k -> False) === proj(s, k -> False) &
+    proj(Ss, k -> True) === vec_omegaMult(vec_omegaMult(proj(s, k -> True)))
+
+  def T(k : Int, s : ITerm, Ts : ITerm) : IFormula =
+    proj(Ts, k -> False) === proj(s, k -> False) &
+    proj(Ts, k -> True) === vec_omegaMult(proj(s, k -> True))
 
   def CX(c : Int, t : Int, s : ITerm, cxs : ITerm) : IFormula =
     proj(cxs, c -> False)            === proj(s, c -> False) &
