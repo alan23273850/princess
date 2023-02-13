@@ -44,7 +44,7 @@ object EPRTest extends App {
   def setK1(s : ITerm) : ITerm =
     complex(a(s), b(s), c(s), d(s), 1)
 
-  val N = 20
+  val N = 2
 
   val vectorOps = Vector(
     CombArray.CombinatorSpec("vec_plus", List(0, 0), 0,
@@ -64,6 +64,7 @@ object EPRTest extends App {
   def bools(n : Int) = for (_ <- 0 until n) yield Sort.Bool
 
   def nFalse(n : Int) = (for (_ <- 0 until n) yield False).toList
+  def nTrue(n : Int) = (for (_ <- 0 until n) yield True).toList
 
   val CartTheory =
     new CartArray(bools(N), complexSort, 2, vectorOps)
@@ -126,7 +127,11 @@ object EPRTest extends App {
 
     val comp0 = createConstant("comp0", complexSort)
     val comp1 = createConstant("comp1", complexSort)
+    val comp2 = createConstant("comp2", complexSort)
+    val comp3 = createConstant("comp3", complexSort)
 
+    // This is the EPR circuit example that
+    // transforms |00> to half |00> and half |11>
     scope {
       !! (H(0, x, y))
       !! (CX(0, 1, y, z))
@@ -136,11 +141,16 @@ object EPRTest extends App {
 //      !! (sel(x, False :: nFalse(N - 1) : _*) === complex(1, 0, 0, 0, 0))
   //    !! (sel(x, True  :: nFalse(N - 1) : _*) === complex(2, 2, 2, 2, 1))
       !! (sel(z, False :: nFalse(N - 1) : _*) === comp0)
-      !! (sel(z, True  :: nFalse(N - 1) : _*) === comp1)
+      !! (sel(z, False :: nTrue(N - 1) : _*) === comp1)
+      !! (sel(z, True  :: nFalse(N - 1) : _*) === comp2)
+      !! (sel(z, True  :: nTrue(N - 1) : _*) === comp3)
       println(???) // sat
-      println(evalToTerm(z))
+    //   println(evalToTerm(z))
+      println(evalToTerm(x))
       println(evalToTerm(comp0))
       println(evalToTerm(comp1))
+      println(evalToTerm(comp2))
+      println(evalToTerm(comp3))
     }
 /*
     scope {
