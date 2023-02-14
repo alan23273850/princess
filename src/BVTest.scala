@@ -5,6 +5,7 @@ import ap.basetypes.IdealInt
 import ap.theories.ADT
 import ADT.BoolADT.{True, False}
 import ap.theories.arrays._
+import scala.collection.mutable.ListBuffer
 
 class BVClass (val N: Integer) extends App {
 
@@ -121,29 +122,34 @@ class BVClass (val N: Integer) extends App {
 
     addTheory(CartTheory)
 
-    val states = (for (i <- 0 to 3*N) yield createConstant("s" + i, arrayN.sort)).toList
-    val zero = createConstant("zero", arrayN.sort)
+    val states = ListBuffer(createConstant("s0", arrayN.sort))
 
     // This is the BV circuit with
     // the hidden string 1010...
     scope {
-        for (i <- 1 to N) {
-            !! (H(i-1, states(i-1), states(i)))
+        for (i <- 0 until N) {
+            val before = states.last
+            states += createConstant("s" + (states.size), arrayN.sort)
+            val after = states.last
+            !! (H(i, before, after))
         }
         for (i <- 0 until N by 2) {
-            if (N+i+2 > 2*N)
-                !! (Z(i, states(N+i), states(N+i+1)))
-            else
-                !! (Z(i, states(N+i), states(N+i+2)))
+            val before = states.last
+            states += createConstant("s" + (states.size), arrayN.sort)
+            val after = states.last
+            !! (Z(i, before, after))
         }
         for (i <- 0 until N) {
-            !! (H(i, states(2*N+i), states(2*N+i+1)))
+            val before = states.last
+            states += createConstant("s" + (states.size), arrayN.sort)
+            val after = states.last
+            !! (H(i, before, after))
         }
 
-      !! (zero === arrayN.const(complex(0, 0, 0, 0, 0)))
-      !! (states(0)  === sto(zero, nFalse(N) ++ List(complex(1, 0, 0, 0, 0)) : _*))
+      !! (states.head  === sto(arrayN.const(complex(0, 0, 0, 0, 0)),
+                               nFalse(N) ++ List(complex(1, 0, 0, 0, 0)) : _*))
       println(???) // sat
-    //   println(evalToTerm(states(3*N)))
+    //   println(evalToTerm(states.last))
     }
   }
 
