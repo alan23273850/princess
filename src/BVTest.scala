@@ -6,6 +6,7 @@ import ap.theories.ADT
 import ADT.BoolADT.{True, False}
 import ap.theories.arrays._
 import scala.collection.mutable.ListBuffer
+import ap.parameters._
 
 class BVClass (val N: Integer) extends App {
 
@@ -117,12 +118,14 @@ class BVClass (val N: Integer) extends App {
     proj(CZs, c -> True, t -> False) === proj(s, c -> True, t -> False) &
     proj(CZs, c -> True, t -> True)  === vec_negate(proj(s, c -> True, t -> True))
 
-  SimpleAPI.withProver(enableAssert = debug) { p =>
+  SimpleAPI.withProver(enableAssert = debug) { p => // , logging = Set(Param.LOG_TASKS
     import p._
 
     addTheory(CartTheory)
 
     val states = ListBuffer(createConstant("s0", arrayN.sort))
+
+    val index = createConstants(N, Sort.Bool)
 
     // This is the BV circuit with
     // the hidden string 1010...
@@ -148,7 +151,11 @@ class BVClass (val N: Integer) extends App {
 
       !! (states.head  === sto(arrayN.const(complex(0, 0, 0, 0, 0)),
                                nFalse(N) ++ List(complex(1, 0, 0, 0, 0)) : _*))
-      println(???) // sat
+      !! (b(sel(states.last, index : _*)) =/= 0 |
+          c(sel(states.last, index : _*)) =/= 0 |
+          d(sel(states.last, index : _*)) =/= 0)
+
+      println(???) // UNsat
     //   println(evalToTerm(states.last))
     }
   }
