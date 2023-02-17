@@ -223,7 +223,7 @@ class GroverAllCompClass (val Q: Integer) extends App {
                                 index ++ List(complex(aH, 0, 0, 0, countH)) : _*))
 
         if (countH % 2 == 0)
-            !! (! (10 * aH > 9 * (1 << (countH / 2))))
+            !! (! (100 * aH > 95 * (1 << (countH / 2))))
         else
             throw new RuntimeException("The number of H gates is not an even number!!!")
 
