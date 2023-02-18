@@ -89,7 +89,7 @@ class GroverAllCompClass(val n: Int) extends Quantum(n) {
                 val before = states.last
                 states += createConstant(arrayN.sort)
                 val after = states.last
-                !! (after === vec_negate(before))
+                !! (NEG(before, after))
             }
         }
 

@@ -76,7 +76,7 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
             val before = states.last
             states += createConstant(arrayN.sort)
             val after = states.last
-            !! (after === vec_negate(before))
+            !! (NEG(before, after))
         }
 
         !! (states.head  === arrayN.store(List(arrayN.const(complex(al, 0, 0, 0, 0)))

@@ -143,4 +143,9 @@ class Quantum(val Q: Int) extends App {
         f &= proj(CqZs, i -> False) === proj(s, i -> False)
     return f
   }
+
+  def NEG(s : ITerm, NEGs : ITerm) : IFormula = {
+    countGate += 1
+    return NEGs === vec_negate(s)
+  }
 }
