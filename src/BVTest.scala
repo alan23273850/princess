@@ -39,6 +39,7 @@ class BVClass(val n: Int) extends Quantum(n) {
             d(selectN(states.last, index : _*)) =/= 0)
 
         println(???) // UNsat
+        // println(countGate)
         // println(evalToTerm(states.last))
     }
   }

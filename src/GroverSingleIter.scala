@@ -97,6 +97,7 @@ class GroverSingleIterClass(val n: Int) extends Quantum(n) {
         }
 
         val proverResult = ???
+        // println(countGate)
         println(proverResult) // UNsat
         if (proverResult == ProverStatus.Sat) {
         }

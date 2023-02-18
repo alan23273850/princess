@@ -90,6 +90,7 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
         !! (! ((aL < al * (1 << Q)) & (aH > ah * (1 << Q))))
 
         val proverResult = ???
+        // println(countGate)
         println(proverResult) // UNsat
         if (proverResult == ProverStatus.Sat) {
         }

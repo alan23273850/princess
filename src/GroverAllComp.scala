@@ -104,6 +104,7 @@ class GroverAllCompClass(val n: Int) extends Quantum(n) {
             throw new RuntimeException("The number of H gates is not an even number!!!")
 
         val proverResult = ???
+        // println(countGate)
         println(proverResult) // UNsat
         if (proverResult == ProverStatus.Sat) {
             // println(evalToTerm(aH / (1 << (countH / 2))))
