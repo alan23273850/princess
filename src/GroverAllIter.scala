@@ -31,7 +31,7 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
             val before = states.last
             states += createConstant(arrayN.sort)
             val after = states.last
-            !! (CqZ(Q, before, after))
+            !! (CqZ(Q-1, before, after))
         }
         //
         for (i <- 0 until Q) {
@@ -57,7 +57,7 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
             val before = states.last
             states += createConstant(arrayN.sort)
             val after = states.last
-            !! (CqZ(Q, before, after))
+            !! (CqZ(Q-1, before, after))
         }
         //
         for (i <- 0 until Q) {
