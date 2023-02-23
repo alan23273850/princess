@@ -11,6 +11,7 @@ class GroverSingleIterClass(val n: Int) extends Quantum(n) {
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(Q, Sort.Bool)
+    val index2 = createConstants(Q, Sort.Bool)
 
     val al = createConstant(Sort.Integer)
     val ah = createConstant(Sort.Integer)
@@ -81,8 +82,10 @@ class GroverSingleIterClass(val n: Int) extends Quantum(n) {
 
         !! (states.head  === arrayN.store(List(arrayN.const(complex(al, 0, 0, 0, 0)))
                                         ++ index ++ List(complex(ah, 0, 0, 0, 0)) : _*))
-        !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, 2*Q)))
-                                        ++ index ++ List(complex(aH, 0, 0, 0, 2*Q)) : _*))
+        // !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, 2*Q)))
+        //                                 ++ index ++ List(complex(aH, 0, 0, 0, 2*Q)) : _*))
+        !! (selectN(states.last, index2 : _*) === complex(aL, 0, 0, 0, 2*Q))
+        !! (selectN(states.last, index : _*) === complex(aH, 0, 0, 0, 2*Q))
         
         !! (al + ah > 0)
         !! (al * ((1 << Q) - 1) > ah)
@@ -90,10 +93,14 @@ class GroverSingleIterClass(val n: Int) extends Quantum(n) {
         !! (! ((aL < al * (1 << Q)) & (aH > ah * (1 << Q))))
 
         for (i <- 0 until Q) {
-            if (i % 2 == 1)
+            if (i % 2 == 1) {
                 !! (index(i) === True)
-            else
+                !! (index2(i) === False)
+            }
+            else {
                 !! (index(i) === False)
+                !! (index2(i) === True)
+            }
         }
 
         val proverResult = ???

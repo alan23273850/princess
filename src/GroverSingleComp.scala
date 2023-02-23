@@ -12,6 +12,7 @@ class GroverSingleCompClass(val n: Int) extends Quantum(n) {
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(Q, Sort.Bool)
+    val index2 = createConstants(Q, Sort.Bool)
     var countH = 0
 
     val al = createConstant(Sort.Integer)
@@ -95,14 +96,20 @@ class GroverSingleCompClass(val n: Int) extends Quantum(n) {
 
         !! (states.head  === arrayN.store(List(arrayN.const(complex(0, 0, 0, 0, 0)))
                                         ++ nFalse(Q) ++ List(complex(1, 0, 0, 0, 0)) : _*))
-        !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, countH)))
-                                        ++ index ++ List(complex(aH, 0, 0, 0, countH)) : _*))
+        // !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, countH)))
+        //                                 ++ index ++ List(complex(aH, 0, 0, 0, countH)) : _*))
+        !! (selectN(states.last, index2 : _*) === complex(aL, 0, 0, 0, countH))
+        !! (selectN(states.last, index : _*) === complex(aH, 0, 0, 0, countH))
 
         for (i <- 0 until Q) {
-            if (i % 2 == 1)
+            if (i % 2 == 1) {
                 !! (index(i) === True)
-            else
+                !! (index2(i) === False)
+            }
+            else {
                 !! (index(i) === False)
+                !! (index2(i) === True)
+            }
         }
 
         if (countH % 2 == 0)

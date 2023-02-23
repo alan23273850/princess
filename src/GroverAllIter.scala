@@ -11,6 +11,7 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(Q, Sort.Bool)
+    val index2 = createConstants(Q, Sort.Bool)
 
     val al = createConstant(Sort.Integer)
     val ah = createConstant(Sort.Integer)
@@ -81,8 +82,11 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
 
         !! (states.head  === arrayN.store(List(arrayN.const(complex(al, 0, 0, 0, 0)))
                                         ++ index ++ List(complex(ah, 0, 0, 0, 0)) : _*))
-        !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, 2*Q)))
-                                        ++ index ++ List(complex(aH, 0, 0, 0, 2*Q)) : _*))
+        // !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, 2*Q)))
+        //                                 ++ index ++ List(complex(aH, 0, 0, 0, 2*Q)) : _*))
+        !! (index =/= index2)
+        !! (selectN(states.last, index2 : _*) === complex(aL, 0, 0, 0, 2*Q))
+        !! (selectN(states.last, index : _*) === complex(aH, 0, 0, 0, 2*Q))
         
         !! (al + ah > 0)
         !! (al * ((1 << Q) - 1) > ah)
