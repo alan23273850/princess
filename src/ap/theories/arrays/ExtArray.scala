@@ -184,7 +184,10 @@ object ExtArray {
                                 case Some(oldVal) => value == oldVal
                                 case None => true
                               })
-                         }))
+                         }),
+                      "Incomplete propagation of arrays detected. " +
+                        "This might be because of missing support for " +
+                        "finite indexes.")
       //-END-ASSERTION-/////////////////////////////////////////////////////////
       normalize(this.defaultValue orElse that.defaultValue,
                 this.values ++
@@ -1263,6 +1266,9 @@ class ExtArray (val indexSorts : Seq[Sort],
    * 
    * TODO: do we have to do something special about cycles in the
    * graph?
+   * 
+   * TODO: the current code is converting more store to store2 than
+   * necessary; 
    */
   protected[arrays]
   def store2store2Lazy(goal         : Goal,
