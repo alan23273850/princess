@@ -5,7 +5,7 @@ import scala.collection.mutable.ListBuffer
 import IExpression._
 
 object BV1bug extends Quantum(1) {
-  SimpleAPI.withProver(enableAssert = debug) { p => import p._
+  SimpleAPI.withProver(enableAssert = debug, otherSettings = settings) { p => import p._
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(1, Sort.Bool)
@@ -34,11 +34,11 @@ object BV1bug extends Quantum(1) {
 
         !! (states.head  === arrayN.store(List(arrayN.const(complex(0, 0, 0, 0, 0)))
                                         ++ nFalse(1) ++ List(complex(1, 0, 0, 0, 0)) : _*))
-        !! (b(selectN(states.last, index : _*)) =/= 0 |
-            c(selectN(states.last, index : _*)) =/= 0 |
-            d(selectN(states.last, index : _*)) =/= 0)
+        ?? (b(selectN(states.last, index : _*)) === 0 &
+            c(selectN(states.last, index : _*)) === 0 &
+            d(selectN(states.last, index : _*)) === 0)
 
-        println(???) // sat
+        println(???) // invalid
         // println(evalToTerm(states.last))
     }
   }

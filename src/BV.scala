@@ -5,7 +5,7 @@ import scala.collection.mutable.ListBuffer
 import IExpression._
 
 class BVClass(val n: Int) extends Quantum(n) {
-  SimpleAPI.withProver(enableAssert = debug) { p => import p._
+  SimpleAPI.withProver(enableAssert = debug, otherSettings = settings) { p => import p._
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(Q, Sort.Bool)
@@ -34,18 +34,18 @@ class BVClass(val n: Int) extends Quantum(n) {
 
         !! (states.head  === arrayN.store(List(arrayN.const(complex(0, 0, 0, 0, 0)))
                                         ++ nFalse(Q) ++ List(complex(1, 0, 0, 0, 0)) : _*))
-        !! (b(selectN(states.last, index : _*)) =/= 0 |
-            c(selectN(states.last, index : _*)) =/= 0 |
-            d(selectN(states.last, index : _*)) =/= 0)
+        ?? (b(selectN(states.last, index : _*)) === 0 &
+            c(selectN(states.last, index : _*)) === 0 &
+            d(selectN(states.last, index : _*)) === 0)
 
-        println(???) // UNsat
+        println(???) // valid
         // println(countGate)
         // println(evalToTerm(states.last))
     }
   }
 }
 
-object BVTest {
+object BV {
     def main(args: Array[String]): Unit = {
         new BVClass(args(0).toInt).main(args)
     }

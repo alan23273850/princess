@@ -6,11 +6,13 @@ import ap.theories.ADT
 import ADT.BoolADT.{True, False}
 import ap.theories.arrays._ // CartArray, CombArray
 import IExpression._
+import ap.parameters.{Param, GlobalSettings}
 
 abstract class QuantumInterface(private val Q: Int) extends App {
 
   var countGate = 0
   val debug = false // change to false for much faster solving
+  val settings = Param.MATCHING_BASE_PRIORITY.set(GlobalSettings.DEFAULT, 5000)
 
   ap.util.Debug.enableAllAssertions(debug)
 

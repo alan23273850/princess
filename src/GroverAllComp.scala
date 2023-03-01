@@ -8,16 +8,14 @@ import IExpression._
 import SimpleAPI.ProverStatus
 
 class GroverAllCompClass(val n: Int) extends Quantum(n) {
-  SimpleAPI.withProver(enableAssert = debug) { p => import p._
+  SimpleAPI.withProver(enableAssert = debug, otherSettings = settings) { p => import p._
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(Q, Sort.Bool)
-    val index2 = createConstants(Q, Sort.Bool)
     var countH = 0
 
     val al = createConstant(Sort.Integer)
     val ah = createConstant(Sort.Integer)
-    val aL = createConstant(Sort.Integer)
     val aH = createConstant(Sort.Integer)
 
     // This is one iteration of Grover's algorithm
@@ -98,18 +96,16 @@ class GroverAllCompClass(val n: Int) extends Quantum(n) {
                                         ++ nFalse(Q) ++ List(complex(1, 0, 0, 0, 0)) : _*))
         // !! (states.last  === arrayN.store(List(arrayN.const(complex(aL, 0, 0, 0, countH)))
         //                                 ++ index ++ List(complex(aH, 0, 0, 0, countH)) : _*))
-        !! (index =/= index2)
-        !! (selectN(states.last, index2 : _*) === complex(aL, 0, 0, 0, countH))
         !! (selectN(states.last, index : _*) === complex(aH, 0, 0, 0, countH))
 
         if (countH % 2 == 0)
-            !! (! (100 * aH > 95 * (1 << (countH / 2))))
+            ?? (100 * aH > 95 * (1 << (countH / 2)))
         else
             throw new RuntimeException("The number of H gates is not an even number!!!")
 
         val proverResult = ???
         // println(countGate)
-        println(proverResult) // UNsat
+        println(proverResult) // valid
         if (proverResult == ProverStatus.Sat) {
             // println(evalToTerm(aH / (1 << (countH / 2))))
             // println(evalToTerm(aL))

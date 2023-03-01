@@ -7,7 +7,7 @@ import IExpression._
 import SimpleAPI.ProverStatus
 
 class GroverAllIterClass(val n: Int) extends Quantum(n) {
-  SimpleAPI.withProver(enableAssert = debug) { p => import p._
+  SimpleAPI.withProver(enableAssert = debug, otherSettings = settings) { p => import p._
 
     val states = ListBuffer(createConstant(arrayN.sort))
     val index = createConstants(Q, Sort.Bool)
@@ -91,11 +91,11 @@ class GroverAllIterClass(val n: Int) extends Quantum(n) {
         !! (al + ah > 0)
         !! (al * ((1 << Q) - 1) > ah)
 
-        !! (! ((aL < al * (1 << Q)) & (aH > ah * (1 << Q))))
+        ?? ((aL < al * (1 << Q)) & (aH > ah * (1 << Q)))
 
         val proverResult = ???
         // println(countGate)
-        println(proverResult) // UNsat
+        println(proverResult) // valid
         if (proverResult == ProverStatus.Sat) {
         }
     }
