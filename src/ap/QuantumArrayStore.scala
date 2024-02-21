@@ -30,6 +30,7 @@ class QuantumArrayStore(private val Q: Int) extends QuantumInterface(Q) {
 
   def H(k : Int, s : ITerm, Hs : ITerm) : IFormula = {
     countGate += 1
+    countH += 1
     return Hs === arraySto(arraySto(s,
         (k, False) -> vec_sqrt2DivN1(vec_plusN1(proj(s, k -> False), proj(s, k -> True)))),
 		(k, True)  -> vec_sqrt2DivN1(vec_minusN1(proj(s, k -> False), proj(s, k -> True))))

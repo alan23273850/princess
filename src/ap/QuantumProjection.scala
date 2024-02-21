@@ -28,6 +28,7 @@ class QuantumProjection(private val Q: Int) extends QuantumInterface(Q) {
 
   def H(k : Int, s : ITerm, hs : ITerm) : IFormula = {
     countGate += 1
+    countH += 1
     return proj(hs, k -> False) ===
         vec_sqrt2DivN1(vec_plusN1(proj(s, k -> False), proj(s, k -> True))) &
             proj(hs, k -> True) ===
