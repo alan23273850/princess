@@ -1,3 +1,3 @@
 package ap;
 
-class Quantum(val Q: Int) extends QuantumProjection(Q)
+class Quantum(val Q: Int, val augment3: Boolean = false) extends QuantumProjection(Q, augment3)

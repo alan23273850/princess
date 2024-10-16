@@ -4,7 +4,7 @@ import ap.parser._
 import ap.theories.ADT.BoolADT.{True, False}
 import IExpression._
 
-class QuantumProjection(private val Q: Int) extends QuantumInterface(Q) {
+class QuantumProjection(private val Q: Int, val augment2: Boolean = false) extends QuantumInterface(Q, augment2) {
 
   import CartTheory.{proj, sel, sto, arraySto, con}
 

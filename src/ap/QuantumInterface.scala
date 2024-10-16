@@ -8,7 +8,7 @@ import ap.theories.arrays._ // CartArray, CombArray
 import IExpression._
 import ap.parameters.{Param, GlobalSettings}
 
-abstract class QuantumInterface(private val Q: Int) extends App {
+abstract class QuantumInterface(private val Q: Int, val augment: Boolean = false) extends App {
 
   var countGate = 0
   var countH = 0
@@ -67,7 +67,7 @@ abstract class QuantumInterface(private val Q: Int) extends App {
   def nFalse(n : Int) = (for (_ <- 0 until n) yield False).toList
 
   val CartTheory =
-    new CartArray(bools(Q), complexSort, 3, vectorOps)
+    new CartArray(bools(Q), complexSort, if (augment) Q else 3, vectorOps)
 
   val arrayN  = CartTheory.extTheories(bools(Q))
 
